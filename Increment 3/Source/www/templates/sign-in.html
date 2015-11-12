@@ -1,0 +1,36 @@
+<ion-view view-title="Sign-In">
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Username</span>
+              <input type="text" ng-model="username">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Password</span>
+              <input type="password" ng-model="pwd">
+            </label>
+          </div>
+          <div class="padding">
+            <button class="button button-block button-positive" ng-click="signIn(username,pwd)">
+              Sign-In
+            </button>
+            <button class="button button-block button-positive" onclick="faceplustest()">
+              Test JSON
+            </button>
+            <div><a href="index1.html" class="button button-block button-positive">FaceDetect</a></div>
+            <div><a href="home.html" class="button button-block button-positive">AnotherDetect</a></div>
+            <p class="text-center">
+              <a href="#/forgot-password">Forgot password</a>
+            </p>
+            <p class="text-center">
+              <a href="#/Registration">New User? Sign Up!</a>
+            </p>
+            <p class="text-center">
+              <a href="#/changepassword">Change password</a>
+            </p>
+            <p class="text-center">
+              <a href="#/deleteAccount"> Delete Account</a>
+            </p>
+          </div>
+        </ion-content>
+      </ion-view>

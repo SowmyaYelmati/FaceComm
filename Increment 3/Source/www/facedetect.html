@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    
+    <script src="js/objectdetect.js"></script>
+		<script src="js/objectdetect.frontalface.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.objectdetect.js"></script>
+    <script type="text/javascript" src="js/facepp-sdk.min.js"></script>
+    <script type="text/javascript">
+      function IdentifyFaces() {
+        var api = new FacePP('0ef14fa726ce34d820c5a44e57fef470', '4Y9YXOMSDvqu1Ompn9NSpNwWQFHs1hYD');
+        api.request('detection/detect', {
+          url: 'https://pbs.twimg.com/profile_images/607639494024691712/XOXVaeA1.jpg',
+          mode: 'normal'
+        }, function(err, result) {
+          if (err) {
+            // TODO handle error
+            return;
+          }
+          // TODO use result
+          document.getElementById('response').innerHTML = JSON.stringify(result);
+          localStorage.setItem("lastname", JSON.stringify(result));
+          var jsontext =JSON.stringify(result);
+          var facerex=JSON.parse(jsontext);
+          var xa=facerex.face[0].position.center.x;
+          var ya=facerex.face[0].position.center.y;
+          var height1=facerex.face[0].position.height;
+          
+          var width1=facerex.face[0].position.width;
+          var img_width=facerex.img_width;
+          var img_height=facerex.img_height;
+          var c=xa*img_width/100;
+          var d=ya*img_height/100;
+          localStorage.setItem("c", c);
+          localStorage.setItem("d", d);
+          var u=height1*img_height/200;
+          var xx=Math.round(1.6*(u+u));
+          localStorage.setItem("cropbox",xx);
+          localStorage.setItem("u", u);
+          var x0=Math.round(c-(1.6*u));
+          var x1=Math.round(c+(1.2*u));
+          var y0=Math.round(d-(1.6*u));
+          var y1=Math.round(d+(1.2*u));
+          localStorage.setItem("x0", x0);
+          localStorage.setItem("y0", y0);
+          localStorage.setItem("y1", y1);
+          localStorage.setItem("x1", x1);
+          updateCanvas();
+        });
+      };
+
+
+    </script>
+    <script>      
+          function getHeight(){
+        alert(localStorage.getItem("cropbox"));
+        return localStorage.getItem("cropbox");
+        }
+    </script>
+    <script>
+      function updateCanvas(){
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        var erase_image = new Image();
+        erase_image.src = 'https://pbs.twimg.com/profile_images/607639494024691712/XOXVaeA1.jpg';           
+        erase_image.onload = function()
+        {
+              canvas.height=localStorage.getItem("cropbox");
+              canvas.width=localStorage.getItem("cropbox");
+              context.drawImage(erase_image, -localStorage.getItem("x0"), -localStorage.getItem("y0"));
+        }
+      }
+      </script>
+    <script>
+		$.fn.highlight = function(rect, color) {
+			$("<div />", {
+				"css": {
+					"border": "2px solid " + color,
+					"position":	"absolute",
+					"left":	($(this).offset().left + rect[0]) + "px",
+					"top":	($(this).offset().top + rect[1]) + "px",
+					"width": rect[2] + "px",
+					"height": rect[3] + "px"
+				}
+			}).appendTo("body");
+		}
+		
+		function highlightFaces(id, color) {
+			$("#" + id).objectdetect("all", {classifier: objectdetect.frontalface}, function(faces) {
+				for (var i = 0; i < faces.length; ++i) {
+					$(this).highlight(faces[i], color);
+				}
+			});
+		}
+		</script>
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/FCClientJS.js"></script>
+  </head>
+  <html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>FaceDetect</title>
+
+    <link href="//code.ionicframework.com/nightly/css/ionic.css" rel="stylesheet">
+    <script src="//code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+      <script src="js/ng-cordova.min.js"></script>
+      <script src="cordova.js"></script>
+  </head>
+
+  <body>
+    <ion-pane class="index">
+		<ion-header-bar class="bar bar-header bar-dark" align-title="center">
+			<h1 class="title">FaceDetect</h1>
+		</ion-header-bar>
+		<ion-content scroll="true" has-bouncing="true" padding="true">
+			</br><button class="button button-dark" onclick="IdentifyFaces()">Identify Faces</button>  
+        <img src="https://pbs.twimg.com/profile_images/607639494024691712/XOXVaeA1.jpg" style="width:100%; height: auto;"></img>
+        <pre id="response">Loading...</pre> 
+    		<canvas id="myCanvas" style="width:25%; height: auto;"></canvas>
+        
+		</ion-content>
+    
+    </ion-pane>
+
+    
+  </body>
+</html>
