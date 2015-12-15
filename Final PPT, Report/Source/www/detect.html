@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    
+    <script src="js/objectdetect.js"></script>
+		<script src="js/objectdetect.frontalface.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.objectdetect.js"></script>
+    <script type="text/javascript" src="js/facepp-sdk.min.js"></script>
+    
+    <script type="text/javascript">
+    
+      function IdentifyFaces() {
+        var api = new FacePP('0ef14fa726ce34d820c5a44e57fef470', '4Y9YXOMSDvqu1Ompn9NSpNwWQFHs1hYD');
+        api.request('detection/detect', {
+          //url: 'https://pbs.twimg.com/profile_images/607639494024691712/XOXVaeA1.jpg',
+          //url:'http://i.imgur.com/aNOTz0d.jpg',
+          url:localStorage.getItem("imglink"),
+          mode: 'normal'
+        }, function(err, result) {
+          if (err) {
+            alert("Error in Identifying Faces, Try Once Again by Logging In");
+            // TODO handle error
+            return;
+          }
+          // TODO use result
+          //document.getElementById('response').innerHTML = JSON.stringify(result);
+          localStorage.setItem("lastname", JSON.stringify(result));
+          var jsontext =JSON.stringify(result);
+          var facerex=JSON.parse(jsontext);
+          
+          
+          
+          localStorage.removeItem("FaceID1");
+          localStorage.removeItem("FaceID2");
+          localStorage.removeItem("FaceID3");
+          localStorage.removeItem("FaceID4");
+          localStorage.removeItem("c1");
+          localStorage.removeItem("c2");
+          localStorage.removeItem("c3");
+          localStorage.removeItem("c4");
+          localStorage.removeItem("d1");
+          localStorage.removeItem("d2");
+          localStorage.removeItem("d3");
+          localStorage.removeItem("d4");
+          localStorage.removeItem("cropbox1");
+          localStorage.removeItem("cropbox2");
+          localStorage.removeItem("cropbox3");
+          localStorage.removeItem("cropbox4");
+          localStorage.removeItem("u");
+          localStorage.removeItem("u1");
+          localStorage.removeItem("u2");
+          localStorage.removeItem("u3");
+          localStorage.removeItem("x01");
+          localStorage.removeItem("x02");
+          localStorage.removeItem("x03");
+          localStorage.removeItem("x04");
+          localStorage.removeItem("y01");
+          localStorage.removeItem("y02");
+          localStorage.removeItem("y03");
+          localStorage.removeItem("y04");
+          localStorage.removeItem("x11");
+          localStorage.removeItem("x13");
+          localStorage.removeItem("x13");
+          localStorage.removeItem("x14");
+          localStorage.removeItem("y11");
+          localStorage.removeItem("y12");
+          localStorage.removeItem("y13");
+          localStorage.removeItem("y14");
+          
+          
+          var xa=facerex.face[0].position.center.x;
+          var ya=facerex.face[0].position.center.y;
+          var height1=facerex.face[0].position.height;
+          var faceid=facerex.face[0].face_id;
+          localStorage.setItem("FaceID1",faceid)
+          var width1=facerex.face[0].position.width;
+          var img_width=facerex.img_width;
+          var img_height=facerex.img_height;
+          var c1=xa*img_width/100;
+          var d1=ya*img_height/100;
+          localStorage.setItem("c1", c1);
+          localStorage.setItem("d1", d1);
+          var u=height1*img_height/200;
+          var xx=Math.round(1.6*(u+u));
+          localStorage.setItem("cropbox1",xx);
+          localStorage.setItem("u", u);
+          var x01=Math.round(c1-(1.6*u));
+          var x11=Math.round(c1+(1.2*u));
+          var y01=Math.round(d1-(1.6*u));
+          var y11=Math.round(d1+(1.2*u));
+          localStorage.setItem("x01", x01);
+          localStorage.setItem("y01", y01);
+          localStorage.setItem("y11", y11);
+          localStorage.setItem("x11", x11);
+          
+          updateCanvas1();
+          
+          
+          
+          var xb=facerex.face[1].position.center.x;
+          var yb=facerex.face[1].position.center.y;
+          var height11=facerex.face[1].position.height;
+          var faceid1=facerex.face[1].face_id;
+          localStorage.setItem("FaceID2",faceid1)
+          var width11=facerex.face[1].position.width;
+          var img_width1=facerex.img_width;
+          var img_height1=facerex.img_height;
+          var c2=xb*img_width1/100;
+          var d2=yb*img_height1/100;
+          localStorage.setItem("c2", c2);
+          localStorage.setItem("d2", d2);
+          var u1=height11*img_height1/200;
+          var xx1=Math.round(1.6*(u1+u1));
+          localStorage.setItem("cropbox2",xx1);
+          localStorage.setItem("u1", u1);
+          var x02=Math.round(c2-(1.6*u1));
+          var x12=Math.round(c2+(1.2*u1));
+          var y02=Math.round(d2-(1.6*u1));
+          var y12=Math.round(d2+(1.2*u1));
+          localStorage.setItem("x02", x02);
+          localStorage.setItem("y02", y02);
+          localStorage.setItem("y12", y12);
+          localStorage.setItem("x12", x12);
+          
+          updateCanvas2();
+          
+          var xc=facerex.face[2].position.center.x;
+          var yc=facerex.face[2].position.center.y;
+          var height12=facerex.face[2].position.height;
+          var faceid2=facerex.face[2].face_id;
+          localStorage.setItem("FaceID3",faceid2)
+          var width12=facerex.face[2].position.width;
+          var img_width2=facerex.img_width;
+          var img_height2=facerex.img_height;
+          var c3=xc*img_width2/100;
+          var d3=yc*img_height2/100;
+          localStorage.setItem("c3", c3);
+          localStorage.setItem("d3", d3);
+          var u2=height12*img_height2/200;
+          var xx2=Math.round(1.6*(u2+u2));
+          localStorage.setItem("cropbox3",xx2);
+          localStorage.setItem("u2", u2);
+          var x03=Math.round(c3-(1.6*u2));
+          var x13=Math.round(c3+(1.2*u2));
+          var y03=Math.round(d3-(1.6*u2));
+          var y13=Math.round(d3+(1.2*u2));
+          localStorage.setItem("x03", x03);
+          localStorage.setItem("y03", y03);
+          localStorage.setItem("y13", y13);
+          localStorage.setItem("x13", x13);
+          
+          updateCanvas3();
+          
+          var xd=facerex.face[3].position.center.x;
+          var yd=facerex.face[3].position.center.y;
+          var height13=facerex.face[3].position.height;
+          var faceid3=facerex.face[3].face_id;
+          localStorage.setItem("FaceID4",faceid3)
+          var width13=facerex.face[3].position.width;
+          var img_width3=facerex.img_width;
+          var img_height3=facerex.img_height;
+          var c4=xd*img_width3/100;
+          var d4=yd*img_height3/100;
+          localStorage.setItem("c4", c4);
+          localStorage.setItem("d4", d4);
+          var u3=height13*img_height3/200;
+          var xx3=Math.round(1.6*(u3+u3));
+          localStorage.setItem("cropbox4",xx3);
+          localStorage.setItem("u3", u3);
+          var x04=Math.round(c4-(1.6*u3));
+          var x14=Math.round(c4+(1.2*u3));
+          var y04=Math.round(d4-(1.6*u3));
+          var y14=Math.round(d4+(1.2*u3));
+          localStorage.setItem("x04", x04);
+          localStorage.setItem("y04", y04);
+          localStorage.setItem("y14", y14);
+          localStorage.setItem("x14", x14);
+          
+          updateCanvas4();
+        });
+      };
+
+
+     function CompareFaces() {
+        var api = new FacePP('0ef14fa726ce34d820c5a44e57fef470', '4Y9YXOMSDvqu1Ompn9NSpNwWQFHs1hYD');
+        api.request('recognition/compare', {
+          face_id1:localStorage.getItem("FaceID1"),
+          face_id2:"10c5008ee0e1fb8f9fa5364a7b4967af",
+          
+          //face_id1:"b763aeafe827a2a1545d98ff748023f6",
+          //face_id2:localStorage.getItem("FaceID1"),
+          //face_id2:"da5987e8c3afe7792a72d3d624c72602",
+          
+          //face_id1:"1f3652ce7551b269253aec834acdab81",
+          //face_id2:localStorage.getItem("FaceID1"),
+          //face_id2:"a30ac3ec58420c334212320b61e01240",
+        }, function(err, result) {
+          if (err) {
+            alert(result);
+            alert("Face Matching Error");
+            //return;
+          }
+          // TODO use result
+          document.getElementById('response1').innerHTML = JSON.stringify(result);
+          
+        });
+      };
+
+    </script>
+    <script>      
+          function getHeight(){
+        alert(localStorage.getItem("cropbox"));
+        return localStorage.getItem("cropbox");
+        }
+    </script>
+    <script>
+      function updateCanvas1(){
+        var canvas = document.getElementById('myCanvas1');
+        var context = canvas.getContext('2d');
+        var erase_image = new Image();
+          //erase_image.src = 'http://i.imgur.com/aNOTz0d.jpg';
+          erase_image.src = localStorage.getItem("imglink");              
+        erase_image.onload = function()
+        {
+              canvas.height=localStorage.getItem("cropbox1");
+              canvas.width=localStorage.getItem("cropbox1");
+              context.drawImage(erase_image, -localStorage.getItem("x01"), -localStorage.getItem("y01"));
+        }
+      }
+      
+      function updateCanvas2(){
+        var canvas = document.getElementById('myCanvas2');
+        var context = canvas.getContext('2d');
+        var erase_image = new Image();
+          //erase_image.src = 'http://i.imgur.com/aNOTz0d.jpg';
+          erase_image.src = localStorage.getItem("imglink");              
+        erase_image.onload = function()
+        {
+              canvas.height=localStorage.getItem("cropbox2");
+              canvas.width=localStorage.getItem("cropbox2");
+              context.drawImage(erase_image, -localStorage.getItem("x02"), -localStorage.getItem("y02"));
+        }
+      }
+      
+      function updateCanvas3(){
+        var canvas = document.getElementById('myCanvas3');
+        var context = canvas.getContext('2d');
+        var erase_image = new Image();
+          //erase_image.src = 'http://i.imgur.com/aNOTz0d.jpg';
+          erase_image.src = localStorage.getItem("imglink");              
+        erase_image.onload = function()
+        {
+              canvas.height=localStorage.getItem("cropbox3");
+              canvas.width=localStorage.getItem("cropbox3");
+              context.drawImage(erase_image, -localStorage.getItem("x03"), -localStorage.getItem("y03"));
+        }
+      }
+      
+      function updateCanvas4(){
+        var canvas = document.getElementById('myCanvas4');
+        var context = canvas.getContext('2d');
+        var erase_image = new Image();
+          //erase_image.src = 'http://i.imgur.com/aNOTz0d.jpg';
+          erase_image.src = localStorage.getItem("imglink");              
+        erase_image.onload = function()
+        {
+              canvas.height=localStorage.getItem("cropbox4");
+              canvas.width=localStorage.getItem("cropbox4");
+              context.drawImage(erase_image, -localStorage.getItem("x04"), -localStorage.getItem("y04"));
+        }
+      }
+      </script>
+
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    
+    <script src="cordova.js"></script>
+
+    
+        
+    
+<script src="script.js"></script>
+<link href="style1.css" type="stylesheet/css" rel="stylesheet">
+</head>
+  <html ng-app="ionicApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>FaceDetect</title>
+
+    <link href="//code.ionicframework.com/nightly/css/ionic.css" rel="stylesheet">
+    <script src="//code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+      <script src="js/ng-cordova.min.js"></script>
+      <script src="cordova.js"></script>
+  </head>
+<body>
+    <ion-pane class="index">
+		<ion-header-bar class="bar bar-header bar-positive" align-title="center">
+			<h1 class="title">Detect</h1>
+		</ion-header-bar>
+		<ion-content scroll="true" has-bouncing="true" padding="true">
+      </br>
+			</br><button class="button button-block button-dark" onclick="document.querySelector('input').click()">Get Images</button>
+      </br><input style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">   
+        <a id="link"></a>
+        <br>
+        <img class="uploadimg">
+        
+        </br><button class="button button-block button-dark" onclick="IdentifyFaces()">Identify Faces</button>
+        </br>
+        
+        
+        <a href="Call.html" class="button button-dark">Call Person</a>
+        <a href="sms.html" class="button button-dark">Message Person</a></br>
+          <canvas id="myCanvas1" style="width:25%; height: auto;border:1px solid #000000;">Canvas...</canvas></br>
+          <canvas id="myCanvas2" style="width:25%; height: auto;border:1px solid #000000;">Canvas...</canvas></br>
+          <!--<div class="button-bar"><a href="Call.html" class="button button-positive">Call 2nd Contact</a>
+          <a href="sms.html" class="button button-positive">Message to 2nd Contact1</a></div></br>-->
+         <canvas id="myCanvas3" style="width:25%; height: auto;border:1px solid #000000;">Canvas...</canvas></br>
+          <!--<div class="button-bar"><a href="Call.html" class="button button-positive">Call 3rd Contact</a>
+          <a href="sms.html" class="button button-positive">Message to 3rd Contact</a></div></br>-->
+          <canvas id="myCanvas4" style="width:25%; height: auto;border:1px solid #000000;">Canvas...</canvas></br>
+          <!--<div class="button-bar"><a href="Call.html" class="button button-positive">Call 4th Contact</a>
+          <a href="sms.html" class="button button-positive">Message to 4th Contact</a></div></br>-->
+         </div>
+          </br><button class="button button-block button-dark" onclick="CompareFaces()">Compare Faces</button>
+          <!--</br>
+          </br><pre id="response">Loading...</pre> -->
+         
+    		
+        
+        </br><pre id="response1">Image Matching Loading...</pre> 
+        
+        <a href="index.html" class="button button-block button-dark">Logout</a>
+        <!--<div1><a href="index.html" class="button button-block button-positive">Logout</a></div1>-->
+		</ion-content>
+    
+    </ion-pane>
+
+    
+  </body>
+</html>

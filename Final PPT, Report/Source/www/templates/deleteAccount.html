@@ -1,0 +1,23 @@
+<ion-view view-title="Delete Account">
+        <ion-content>
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Username</span>
+              <input type="text" ng-model="username">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Password</span>
+              <input type="password" ng-model="pwd">
+            </label>
+          </div>
+          <div class="padding">
+            <button class="button button-block button-positive" ng-click="removeAcc(username,pwd)">
+              Remove Account
+            </button>
+            <p>{{Msg}}</p>
+            <p>
+            Return to <a href="#/sign-in">Sign-In</a>.
+          </p>
+            </div>
+        </ion-content>
+      </ion-view>
